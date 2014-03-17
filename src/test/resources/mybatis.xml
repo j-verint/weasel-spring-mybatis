@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="cacheEnabled" value="true"/>
+		<setting name="lazyLoadingEnabled" value="true"/>
+		<setting name="aggressiveLazyLoading" value="false"/>
+	</settings>
+	
+	<typeAliases>
+		<typeAlias type="com.concom.lang.Page" alias="Page"/>
+		<typeAlias type="com.concom.security.domain.user.User" alias="User"/>
+		<typeAlias type="com.concom.security.domain.user.Role" alias="Role"/>
+		<typeAlias type="com.concom.security.domain.user.Auth" alias="Auth"/>
+		<typeAlias type="com.concom.security.domain.online.AutoOnline" alias="AutoOnline"/>
+		<typeAlias type="com.concom.security.domain.message.AlarmMessage" alias="AlarmMessage"/>
+	</typeAliases>
+	
+	<plugins>
+		<plugin interceptor="com.melon.framework.mybatis.RWPlugin"/>
+	</plugins>
+	
+
+</configuration>
