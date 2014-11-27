@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 
-import com.weasel.lang.helper.DemonPredict;
+import com.weasel.core.helper.DemonPredict;
 
 /**
  * @author Dylan
