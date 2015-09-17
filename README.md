@@ -8,14 +8,18 @@ weasel-spring-mybatis<br />
 <br />
 <strong><span style="font-size:32px;">功能</span></strong><br />
 
-<p>
-	一 通用CRUD数据库操作。通过MybatisRepository接口和MybatisOperations提供了一些通用的CURD数据库操作。
-</p>
+一 通用CRUD数据库操作。通过MybatisRepository接口和MybatisOperations提供了一些通用的CURD数据库操作。<br />
+
 二 分页插件。能过PagePlugin提供自动分页，目前支持MySQL和PostgreSQL数据库的分页。如果需要更多的数据库支持，用户可以实现Dialect接口来实现。<br />
+
 三 合并mybatis配置文件。默认情况下，mybatis的配置文件只能有一个，所有mybatis的配置都需要配置在该配置文件下。但有些时候，我们需要在多个文件中配置mybatis。虽然这种情况很少见，但的确存在。可以通过提供的MyBatisSqlSessionFactoryBean代替org.mybatis.spring.SqlSessionFactoryBean。该功能处于测验性阶段。<br />
+
 四 读写分离。通过DynamicRWDataSourceProxy提供读写分离代理，适用于一个读库和一个写库的使用场景。<br />
+
 五 多数据源读写分离。通过DynamicMultiRWDataSourceProxy提供多数据源的读写分离代理，适用于多个读库和多个写库的使用场景。<br />
+
 六 读写分离插件。通过RWPlugin提供自动读写分离。<br />
+
 七 自定义读写库。用户可以通过DataSourceHolder自定义在执行sql语句前使用读库还是写库。如果用户想在读库中执行该语句，可以调用DataSourceHolder的静态方法useRead来切换。如果用户想在写库中执行该语句，可以调用DataSourceHolder的静态方法useWrite来切换。当用户通过DataSourceHolder指定了读写库，本次sql执行RWPlugin的自动路由将不起作用。<br />
 <br />
 <br />
@@ -31,15 +35,12 @@ mysql的依赖配置<br />
 <span style="white-space:pre">	</span>&lt;version&gt;5.1.36&lt;/version&gt;<br />
 &lt;/dependency&gt;<br />
 <br />
-<br />
 postgresql的依赖配置<br />
 &lt;dependency&gt;<br />
 <span style="white-space:pre">	</span>&lt;groupId&gt;org.postgresql&lt;/groupId&gt;<br />
 <span style="white-space:pre">	</span>&lt;artifactId&gt;postgresql&lt;/artifactId&gt;<br />
 <span style="white-space:pre">	</span>&lt;version&gt;9.4-1202-jdbc42&lt;/version&gt;<br />
 &lt;/dependency&gt;<br />
-<br />
-<br />
 <br />
 <br />
 <span style="font-size:32px;"><strong>配置</strong></span><br />
