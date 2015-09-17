@@ -51,7 +51,7 @@ postgresql的依赖配置<br />
 <br />
 <strong><span style="font-size:24px;">二 读写分离插件配置</span></strong><br />
 &nbsp; &nbsp; 在mybatis配置文件&lt;plugins&gt;节点下添加以下配置:<br />
-&nbsp; &nbsp; &lt;plugin interceptor=&quot;com.melon.framework.mybatis.RWPlugin&quot;/&gt;<br />
+&nbsp; &nbsp; &lt;plugin interceptor=&quot;com.weasel.mybatis.RWPlugin&quot;/&gt;<br />
 <br />
 <strong><span style="font-size:24px;">三 双数据源的读写分离配置</span></strong><br />
 &nbsp; &nbsp;<span style="font-size:18px;"><strong>在spring配置文件中先配置读数据和写数据源:</strong></span><br />
