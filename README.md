@@ -1,13 +1,16 @@
 weasel-spring-mybatis<br />
-=====================<br />
-前言<br />
+=====================
+<strong><span style="font-size:32px;">前言</span></strong><br />
 <br />
 <br />
 这是一个基本Spring项目的mybatis的封装包。该包主要封装了对数据库的一些通用CURD操作和数据库的连接。项目基于mybatis-3.2.1<br />
 <br />
 <br />
-功能<br />
-一 通用CRUD数据库操作。通过MybatisRepository接口和MybatisOperations提供了一些通用的CURD数据库操作。<br />
+<strong><span style="font-size:32px;">功能</span></strong><br />
+
+<p>
+	一 通用CRUD数据库操作。通过MybatisRepository接口和MybatisOperations提供了一些通用的CURD数据库操作。
+</p>
 二 分页插件。能过PagePlugin提供自动分页，目前支持MySQL和PostgreSQL数据库的分页。如果需要更多的数据库支持，用户可以实现Dialect接口来实现。<br />
 三 合并mybatis配置文件。默认情况下，mybatis的配置文件只能有一个，所有mybatis的配置都需要配置在该配置文件下。但有些时候，我们需要在多个文件中配置mybatis。虽然这种情况很少见，但的确存在。可以通过提供的MyBatisSqlSessionFactoryBean代替org.mybatis.spring.SqlSessionFactoryBean。该功能处于测验性阶段。<br />
 四 读写分离。通过DynamicRWDataSourceProxy提供读写分离代理，适用于一个读库和一个写库的使用场景。<br />
@@ -16,8 +19,7 @@ weasel-spring-mybatis<br />
 七 自定义读写库。用户可以通过DataSourceHolder自定义在执行sql语句前使用读库还是写库。如果用户想在读库中执行该语句，可以调用DataSourceHolder的静态方法useRead来切换。如果用户想在写库中执行该语句，可以调用DataSourceHolder的静态方法useWrite来切换。当用户通过DataSourceHolder指定了读写库，本次sql执行RWPlugin的自动路由将不起作用。<br />
 <br />
 <br />
-依赖包<br />
-<br />
+<strong><span style="font-size:32px;">依赖包</span></strong><br />
 <br />
 要连接数据库，首先要将数据库厂商的连接实现依赖到项目中，在这个包中没有依赖该实现包，需要使用者在自己的应用中依赖。<br />
 mysql的依赖配置<br />
@@ -40,10 +42,9 @@ postgresql的依赖配置<br />
 <br />
 <br />
 <br />
-配置<br />
+<span style="font-size:32px;"><strong>配置</strong></span><br />
 <br />
-<br />
-一 分页插件配置<br />
+<strong><span style="font-size:24px;">一 分页插件配置</span></strong><br />
 &nbsp; 在mybatis配置文件&lt;plugins&gt;节点下添加以下配置:<br />
 <span style="white-space:pre">	</span>&lt;plugin interceptor=&quot;com.weasel.mybatis.PagePlugin&quot;&gt;<br />
 <span style="white-space:pre">		</span>&lt;property name=&quot;SQL_REGULAR&quot; value=&quot;.*?queryPage.*?&quot;/&gt;<br />
@@ -52,13 +53,13 @@ postgresql的依赖配置<br />
 <span style="white-space:pre">	</span>&lt;/plugin&gt;<br />
 <br />
 <br />
-二 读写分离插件配置<br />
+<strong><span style="font-size:24px;">二 读写分离插件配置</span></strong><br />
 &nbsp; &nbsp; 在mybatis配置文件&lt;plugins&gt;节点下添加以下配置:<br />
 &nbsp; &nbsp; &lt;plugin interceptor=&quot;com.melon.framework.mybatis.RWPlugin&quot;/&gt;<br />
 <br />
 <br />
-三 双数据源的读写分离配置<br />
-&nbsp; &nbsp;在spring配置文件中先配置读数据和写数据源:<br />
+<strong><span style="font-size:24px;">三 双数据源的读写分离配置</span></strong><br />
+&nbsp; &nbsp;<span style="font-size:18px;"><strong>在spring配置文件中先配置读数据和写数据源:</strong></span><br />
 &nbsp; &nbsp;&lt;bean id=&quot;master&quot; class=&quot;com.mchange.v2.c3p0.ComboPooledDataSource&quot;<br />
 <span style="white-space:pre">		</span>destroy-method=&quot;close&quot;&gt;<br />
 <span style="white-space:pre">		</span>&lt;property name=&quot;driverClass&quot; value=&quot;${r.jdbc.dirverClass}&quot; /&gt;<br />
@@ -87,19 +88,19 @@ postgresql的依赖配置<br />
 <span style="white-space:pre">		</span>&lt;property name=&quot;maxStatements&quot; value=&quot;1000&quot; /&gt;<br />
 <span style="white-space:pre">		</span>&lt;property name=&quot;idleConnectionTestPeriod&quot; value=&quot;8&quot; /&gt;<br />
 <span style="white-space:pre">	</span>&lt;/bean&gt;<br />
-&nbsp; &nbsp;再在spring配置文件中定义数据源的代理类:<br />
+&nbsp; &nbsp;<strong><span style="font-size:18px;">再在spring配置文件中定义数据源的代理类:</span></strong><br />
 &nbsp; &lt;bean id=&quot;mySqlDataSource&quot; class=&quot;com.concom.mybatis.DynamicRWDataSourceProxy&quot;&gt; &nbsp;&nbsp;<br />
 &nbsp; &nbsp; &nbsp; &nbsp; &lt;property name=&quot;readDataSource&quot; ref=&quot;master&quot;/&gt;<br />
 &nbsp; &nbsp; &nbsp; &nbsp; &lt;property name=&quot;writeDataSource&quot; ref=&quot;slave&quot;/&gt;<br />
 &nbsp; &lt;/bean&gt;<br />
-&nbsp; 在spring配置文件中定义SessionFactory:<br />
+&nbsp; <span style="font-size:18px;"><strong>在spring配置文件中定义SessionFactory:</strong></span><br />
 &nbsp; &lt;bean id=&quot;sqlSessionFactory&quot; class=&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;&gt;<br />
 <span style="white-space:pre">		</span>&lt;property name=&quot;dataSource&quot; ref=&quot;mySqlDataSource&quot; /&gt;<br />
 <span style="white-space:pre">		</span>&lt;property name=&quot;configLocation&quot; value=&quot;classpath:META-INF/mybatis/mybatis.xml&quot; /&gt;<br />
 <span style="white-space:pre">		</span>&lt;property name=&quot;mapperLocations&quot; value=&quot;classpath:META-INF/mybatis/mappers/**/*.xml&quot; /&gt;<br />
 <span style="white-space:pre">	</span>&lt;/bean&gt;<br />
-四 多数据源读写分离配置<br />
-&nbsp; 在spring配置文件中先配置读数据和写数据源:<br />
+<strong><span style="font-size:24px;">四 多数据源读写分离配置</span><br />
+&nbsp; <span style="font-size:18px;">在spring配置文件中先配置读数据和写数据源:</span></strong><br />
 &nbsp; &lt;bean id=&quot;master1&quot; class=&quot;com.mchange.v2.c3p0.ComboPooledDataSource&quot;<br />
 <span style="white-space:pre">		</span>destroy-method=&quot;close&quot;&gt;<br />
 <span style="white-space:pre">		</span>&lt;property name=&quot;driverClass&quot; value=&quot;${r1.jdbc.dirverClass}&quot; /&gt;<br />
@@ -156,7 +157,7 @@ postgresql的依赖配置<br />
 <span style="white-space:pre">		</span>&lt;property name=&quot;maxStatements&quot; value=&quot;1000&quot; /&gt;<br />
 <span style="white-space:pre">		</span>&lt;property name=&quot;idleConnectionTestPeriod&quot; value=&quot;8&quot; /&gt;<br />
 <span style="white-space:pre">	</span>&lt;/bean&gt;<br />
-&nbsp; &nbsp; 再在spring配置文件中定义数据源的代理类:<br />
+&nbsp; <strong><span style="font-size:18px;">&nbsp; 再在spring配置文件中定义数据源的代理类:</span></strong><br />
 &nbsp; &nbsp; &lt;bean id=&quot;mySqlDataSource&quot; class=&quot;com.concom.mybatis.DynamicMultiRWDataSourceProxy&quot;&gt; &nbsp;&nbsp;<br />
 &nbsp; &nbsp; &nbsp; &nbsp; &lt;property name=&quot;readDataSources&quot;&gt;<br />
 &nbsp; &nbsp; &nbsp; &nbsp; <span style="white-space:pre">	</span>&lt;list&gt;<br />
@@ -171,33 +172,30 @@ postgresql的依赖配置<br />
 &nbsp; &nbsp; &nbsp; &nbsp; <span style="white-space:pre">	</span>&lt;/list&gt;<br />
 &nbsp; &nbsp; &nbsp; &nbsp; &lt;/property&gt;<br />
 &nbsp; &nbsp; &lt;/bean&gt;<br />
-&nbsp; &nbsp;在spring配置文件中定义SessionFactory:<br />
+&nbsp; &nbsp;<strong><span style="font-size:18px;">在spring配置文件中定义SessionFactory:</span></strong><br />
 &nbsp; &lt;bean id=&quot;sqlSessionFactory&quot; class=&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;&gt;<br />
 <span style="white-space:pre">		</span>&lt;property name=&quot;dataSource&quot; ref=&quot;mySqlDataSource&quot; /&gt;<br />
 <span style="white-space:pre">		</span>&lt;property name=&quot;configLocation&quot; value=&quot;classpath:META-INF/mybatis/mybatis.xml&quot; /&gt;<br />
 <span style="white-space:pre">		</span>&lt;property name=&quot;mapperLocations&quot; value=&quot;classpath:META-INF/mybatis/mappers/**/*.xml&quot; /&gt;<br />
 &nbsp; &lt;/bean&gt;<span style="white-space:pre">	</span><br />
 &nbsp;&nbsp;<br />
-&nbsp; 注意：在三和四中只需要配置一种场景就可以，理论上多数据源读写分离中读库和写库可以是任意多个。读写分离只是数据源的路由，并没有做到读库和写库的数据同步。要实现读库和写库的数据同步，用户需要自行在数据库级中处理。<br />
+&nbsp; <span style="font-size:14px;">注意：在三和四中只需要配置一种场景就可以，理论上多数据源读写分离中读库和写库可以是任意多个。读写分离只是数据源的路由，并没有做到读库和写库的数据同步。要实现读库和写库的数据同步，用户需要自行在数据库级中处理。</span><br />
 &nbsp;&nbsp;<br />
-五 mybatis多个配置文件合并配置。<br />
-&nbsp; 在spring配置文件中定义SessionFactory:<br />
+<strong><span style="font-size:24px;">五 mybatis多个配置文件合并配置</span></strong>。<br />
+&nbsp; <strong><span style="font-size:18px;">在spring配置文件中定义SessionFactory:</span></strong><br />
 &nbsp; &lt;bean id=&quot;sqlSessionFactory&quot; class=&quot;com.weasel.mybatis.MyBatisSqlSessionFactoryBean&quot;&gt;<br />
 <span style="white-space:pre">		</span>&lt;property name=&quot;dataSource&quot; ref=&quot;mySqlDataSource&quot; /&gt;<br />
 <span style="white-space:pre">		</span>&lt;property name=&quot;configLocation&quot; value=&quot;classpath:META-INF/mybatis/config/*.xml&quot; /&gt; &nbsp;&lt;!--将所有mybatis配置文件放在config目录下。<br />
 <span style="white-space:pre">		</span>&lt;property name=&quot;mapperLocations&quot; value=&quot;classpath:META-INF/mybatis/mappers/**/*.xml&quot; /&gt;<br />
 &nbsp; &lt;/bean&gt;<br />
+<strong><span style="font-size:24px;">六 使用通用CURD。</span><br />
 <br />
-<br />
-六 使用通用CURD。<br />
-<br />
-<br />
-&nbsp; 自定义一个接口，继承MybatisRepository。<br />
+&nbsp; <span style="font-size:18px;">自定义一个接口，继承MybatisRepository。</span></strong><br />
 &nbsp;public interface UserRepository extends MybatisRepository&lt;Long, User&gt; {<br />
 <br />
 <br />
 }<br />
-&nbsp; 自定义一个类，继承MybatisOperations，并实现自定义的接口。<br />
+&nbsp; <strong><span style="font-size:18px;">自定义一个类，继承MybatisOperations，并实现自定义的接口。</span></strong><br />
 &nbsp;public class UserRepositoryImpl extends MybatisOperations&lt;Long, User&gt; implements UserRepository {<br />
 <br />
 <br />
@@ -206,8 +204,7 @@ postgresql的依赖配置<br />
 这里值得注意的是save方法，该方法的默认实现是当entity的id值不为空时，认为用户想做的是更新操作，会调用update方法。当entity的id值为空时，认为用户想做的是插入操作，会调用insert方法。<br />
 <br />
 <br />
-&nbsp;mapper文件的配置<br />
-<br />
+<strong><span style="font-size:32px;">&nbsp;mapper文件的配置</span></strong><br />
 <br />
 当然，具体的sql语句该包是不知道的，这个还需要用户自己去定义，sql语句的定义在mapper文件中，具体怎么写mapper文件用户可以参考mybatis的官方文档，下面给一个简单的:<br />
 &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;<br />
@@ -253,8 +250,7 @@ postgresql的依赖配置<br />
 <br />
 &lt;/mapper&gt;<br />
 <br />
-<br />
-mapper文件配置的一些注意事项<br />
+<strong><span style="font-size:24px;">mapper文件配置的一些注意事项</span></strong><br />
 这里我们看到namespace使用的是com.weasel.mybatis.test.domain.User，即用户类的包路径，这里是一个约定。如果用户不想这样的约定，在继承MybatisOperations类时可以重写getNamespace，自定义namespace。还有个queryPage，因为分页插件中配置了&lt;property name=&quot;SQL_REGULAR&quot; value=&quot;.*?queryPage.*?&quot;/&gt;，也即当发起带有queryPage字母的，插件都会拦截，为该请求加上分页，这也是一个约定。<br />
 因为MybatisOperations中提供了很多通用的方法，但这些方法的sql语句是都没有写的，框架也不知道用户具体的sql语句怎么写，需要用户自己提供。如果用户需要使用所有MybatisOperations提供的方法，应该在mapper文件中定义以下的sql语句，方法和对应的sql语句的id如下:<br />
 <br />
