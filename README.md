@@ -1,10 +1,7 @@
 weasel-spring-mybatis<br />
 =====================
 <strong><span style="font-size:32px;">前言</span></strong><br />
-<br />
-<br />
 这是一个基本Spring项目的mybatis的封装包。该包主要封装了对数据库的一些通用CURD操作和数据库的连接。项目基于mybatis-3.2.1<br />
-<br />
 <br />
 <strong><span style="font-size:32px;">功能</span></strong><br />
 
@@ -42,7 +39,6 @@ postgresql的依赖配置<br />
 <span style="white-space:pre">	</span>&lt;version&gt;9.4-1202-jdbc42&lt;/version&gt;<br />
 &lt;/dependency&gt;<br />
 <br />
-<br />
 <span style="font-size:32px;"><strong>配置</strong></span><br />
 <br />
 <strong><span style="font-size:24px;">一 分页插件配置</span></strong><br />
@@ -53,11 +49,9 @@ postgresql的依赖配置<br />
 <span style="white-space:pre">		</span>&lt;property name=&quot;DIALECT&quot; value=&quot;com.weasel.mybatis.dialect.impl.PostgreSQLDialect&quot;/&gt;<br />
 <span style="white-space:pre">	</span>&lt;/plugin&gt;<br />
 <br />
-<br />
 <strong><span style="font-size:24px;">二 读写分离插件配置</span></strong><br />
 &nbsp; &nbsp; 在mybatis配置文件&lt;plugins&gt;节点下添加以下配置:<br />
 &nbsp; &nbsp; &lt;plugin interceptor=&quot;com.melon.framework.mybatis.RWPlugin&quot;/&gt;<br />
-<br />
 <br />
 <strong><span style="font-size:24px;">三 双数据源的读写分离配置</span></strong><br />
 &nbsp; &nbsp;<span style="font-size:18px;"><strong>在spring配置文件中先配置读数据和写数据源:</strong></span><br />
@@ -194,11 +188,9 @@ postgresql的依赖配置<br />
 &nbsp; <span style="font-size:18px;">自定义一个接口，继承MybatisRepository。</span></strong><br />
 &nbsp;public interface UserRepository extends MybatisRepository&lt;Long, User&gt; {<br />
 <br />
-<br />
 }<br />
 &nbsp; <strong><span style="font-size:18px;">自定义一个类，继承MybatisOperations，并实现自定义的接口。</span></strong><br />
 &nbsp;public class UserRepositoryImpl extends MybatisOperations&lt;Long, User&gt; implements UserRepository {<br />
-<br />
 <br />
 }<br />
 &nbsp;这样自定义的类就拥有了连接数据库和一些通用的CRUD操作，这些方法来自MybatisOperations，分别有get(ID id);save(T entity);saveBatch(List&lt;T&gt; entities);insert(T entity);update(T entity);delete(T entity); deleteBatch(List&lt;T&gt; entities);query(T entity); queryPage(Page&lt;T&gt; page);方法。<br />
@@ -218,44 +210,31 @@ postgresql的依赖配置<br />
 <span style="white-space:pre">		</span>&lt;result property=&quot;username&quot; column=&quot;username&quot; /&gt;<br />
 <span style="white-space:pre">		</span>&lt;result property=&quot;password&quot; column=&quot;password&quot; /&gt;<br />
 <span style="white-space:pre">	</span>&lt;/resultMap&gt;<br />
-<br />
-<br />
 <span style="white-space:pre">	</span>&lt;select id=&quot;getById&quot; resultType=&quot;User&quot;&gt;<br />
 <span style="white-space:pre">		</span>select * from users where id =<br />
 <span style="white-space:pre">		</span>#{id}<br />
 <span style="white-space:pre">	</span>&lt;/select&gt;<br />
-<br />
-<br />
 <span style="white-space:pre">	</span>&lt;insert id=&quot;save&quot; parameterType=&quot;User&quot;&gt;<br />
 <span style="white-space:pre">		</span>insert into users<br />
 <span style="white-space:pre">		</span>(id,username,password)<br />
 <span style="white-space:pre">		</span>values (#{id},#{username},#{password})<br />
 <span style="white-space:pre">	</span>&lt;/insert&gt;<br />
-<br />
-<br />
 <span style="white-space:pre">	</span>&lt;update id=&quot;update&quot;&gt;<br />
 <span style="white-space:pre">		</span>update users set<br />
 <span style="white-space:pre">		</span>username = #{username},<br />
 <span style="white-space:pre">		</span>password = #{password}<br />
 <span style="white-space:pre">		</span>where id = #{id}<br />
 <span style="white-space:pre">	</span>&lt;/update&gt;<br />
-<br />
-<br />
 <span style="white-space:pre">	</span>&lt;select id=&quot;queryPage&quot; resultMap=&quot;userResultMap&quot;&gt;<br />
 <span style="white-space:pre">		</span>select id as id,<br />
 <span style="white-space:pre">			</span> &nbsp; username as username,<br />
 <span style="white-space:pre">			</span> &nbsp; password as password<br />
 <span style="white-space:pre">	</span> &nbsp; &nbsp;from users<br />
 <span style="white-space:pre">	</span>&lt;/select&gt;<br />
-<br />
-<br />
 &lt;/mapper&gt;<br />
-<br />
 <strong><span style="font-size:24px;">mapper文件配置的一些注意事项</span></strong><br />
 这里我们看到namespace使用的是com.weasel.mybatis.test.domain.User，即用户类的包路径，这里是一个约定。如果用户不想这样的约定，在继承MybatisOperations类时可以重写getNamespace，自定义namespace。还有个queryPage，因为分页插件中配置了&lt;property name=&quot;SQL_REGULAR&quot; value=&quot;.*?queryPage.*?&quot;/&gt;，也即当发起带有queryPage字母的，插件都会拦截，为该请求加上分页，这也是一个约定。<br />
 因为MybatisOperations中提供了很多通用的方法，但这些方法的sql语句是都没有写的，框架也不知道用户具体的sql语句怎么写，需要用户自己提供。如果用户需要使用所有MybatisOperations提供的方法，应该在mapper文件中定义以下的sql语句，方法和对应的sql语句的id如下:<br />
-<br />
-<br />
 get(ID id) &lt;---------&gt; getById<br />
 get(T entity) &lt;---------&gt; get<br />
 insert(T entity) &lt;---------&gt; save<br />
