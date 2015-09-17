@@ -5,6 +5,7 @@ weasel-spring-mybatis
 这是一个基本Spring项目的mybatis的封装包。该包主要封装了对数据库的一些通用CURD操作和数据库的连接。项目基于mybatis-3.2.1
 
 功能
+
 一 通用CRUD数据库操作。通过MybatisRepository接口和MybatisOperations提供了一些通用的CURD数据库操作。
 二 分页插件。能过PagePlugin提供自动分页，目前支持MySQL和PostgreSQL数据库的分页。如果需要更多的数据库支持，用户可以实现Dialect接口来实现。
 三 合并mybatis配置文件。默认情况下，mybatis的配置文件只能有一个，所有mybatis的配置都需要配置在该配置文件下。但有些时候，我们需要在多个文件中配置mybatis。虽然这种情况很少见，但的确存在。可以通过提供的MyBatisSqlSessionFactoryBean代替org.mybatis.spring.SqlSessionFactoryBean。该功能处于测验性阶段。
