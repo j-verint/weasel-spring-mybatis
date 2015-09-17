@@ -7,18 +7,23 @@ weasel-spring-mybatis
 功能
 
 一 通用CRUD数据库操作。通过MybatisRepository接口和MybatisOperations提供了一些通用的CURD数据库操作。
+
 二 分页插件。能过PagePlugin提供自动分页，目前支持MySQL和PostgreSQL数据库的分页。如果需要更多的数据库支持，用户可以实现Dialect接口来实现。
+
 三 合并mybatis配置文件。默认情况下，mybatis的配置文件只能有一个，所有mybatis的配置都需要配置在该配置文件下。但有些时候，我们需要在多个文件中配置mybatis。虽然这种情况很少见，但的确存在。可以通过提供的MyBatisSqlSessionFactoryBean代替org.mybatis.spring.SqlSessionFactoryBean。该功能处于测验性阶段。
+
 四 读写分离。通过DynamicRWDataSourceProxy提供读写分离代理，适用于一个读库和一个写库的使用场景。
+
 五 多数据源读写分离。通过DynamicMultiRWDataSourceProxy提供多数据源的读写分离代理，适用于多个读库和多个写库的使用场景。
+
 六 读写分离插件。通过RWPlugin提供自动读写分离。
+
 七 自定义读写库。用户可以通过DataSourceHolder自定义在执行sql语句前使用读库还是写库。如果用户想在读库中执行该语句，可以调用DataSourceHolder的静态方法useRead来切换。如果用户想在写库中执行该语句，可以调用DataSourceHolder的静态方法useWrite来切换。当用户通过DataSourceHolder指定了读写库，本次sql执行RWPlugin的自动路由将不起作用。
 
 依赖包
 
 要连接数据库，首先要将数据库厂商的连接实现依赖到项目中，在这个包中没有依赖该实现包，需要使用者在自己的应用中依赖。
 mysql的依赖配置
-
 <dependency>
 	<groupId>mysql</groupId>
 	<artifactId>mysql-connector-java</artifactId>
@@ -31,7 +36,6 @@ postgresql的依赖配置
 	<artifactId>postgresql</artifactId>
 	<version>9.4-1202-jdbc42</version>
 </dependency>
-
 
 配置
 
@@ -62,8 +66,8 @@ postgresql的依赖配置
 		<property name="maxIdleTime" value="1800" />
 		<property name="maxStatements" value="1000" />
 		<property name="idleConnectionTestPeriod" value="8" />
-	</bean>
-	<bean id="slave" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+   </bean>
+   <bean id="slave" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
 		<property name="driverClass" value="${w.jdbc.dirverClass}" />
 		<property name="jdbcUrl" value="${w.jdbc.url}" />
@@ -76,7 +80,7 @@ postgresql的依赖配置
 		<property name="maxIdleTime" value="1800" />
 		<property name="maxStatements" value="1000" />
 		<property name="idleConnectionTestPeriod" value="8" />
-	</bean>
+   </bean>
    再在spring配置文件中定义数据源的代理类:
   <bean id="mySqlDataSource" class="com.concom.mybatis.DynamicRWDataSourceProxy">   
         <property name="readDataSource" ref="master"/>
@@ -174,7 +178,8 @@ postgresql的依赖配置
   在spring配置文件中定义SessionFactory:
   <bean id="sqlSessionFactory" class="com.weasel.mybatis.MyBatisSqlSessionFactoryBean">
 		<property name="dataSource" ref="mySqlDataSource" />
-		<property name="configLocation" value="classpath:META-INF/mybatis/config/*.xml" />  <!--将所有mybatis配置文件放在config目录下。
+		<!--将所有mybatis配置文件放在config目录下。-->
+		<property name="configLocation" value="classpath:META-INF/mybatis/config/*.xml" />  
 		<property name="mapperLocations" value="classpath:META-INF/mybatis/mappers/**/*.xml" />
   </bean>
 
