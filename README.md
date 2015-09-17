@@ -84,7 +84,7 @@ postgresql的依赖配置<br />
 <span style="white-space:pre">		</span>&lt;property name=&quot;idleConnectionTestPeriod&quot; value=&quot;8&quot; /&gt;<br />
 <span style="white-space:pre">	</span>&lt;/bean&gt;<br />
 &nbsp; &nbsp;<strong><span style="font-size:18px;">再在spring配置文件中定义数据源的代理类:</span></strong><br />
-&nbsp; &lt;bean id=&quot;mySqlDataSource&quot; class=&quot;com.concom.mybatis.DynamicRWDataSourceProxy&quot;&gt; &nbsp;&nbsp;<br />
+&nbsp; &lt;bean id=&quot;mySqlDataSource&quot; class=&quot;com.weasel.mybatis.DynamicRWDataSourceProxy&quot;&gt; &nbsp;&nbsp;<br />
 &nbsp; &nbsp; &nbsp; &nbsp; &lt;property name=&quot;readDataSource&quot; ref=&quot;master&quot;/&gt;<br />
 &nbsp; &nbsp; &nbsp; &nbsp; &lt;property name=&quot;writeDataSource&quot; ref=&quot;slave&quot;/&gt;<br />
 &nbsp; &lt;/bean&gt;<br />
@@ -153,7 +153,7 @@ postgresql的依赖配置<br />
 <span style="white-space:pre">		</span>&lt;property name=&quot;idleConnectionTestPeriod&quot; value=&quot;8&quot; /&gt;<br />
 <span style="white-space:pre">	</span>&lt;/bean&gt;<br />
 &nbsp; <strong><span style="font-size:18px;">&nbsp; 再在spring配置文件中定义数据源的代理类:</span></strong><br />
-&nbsp; &nbsp; &lt;bean id=&quot;mySqlDataSource&quot; class=&quot;com.concom.mybatis.DynamicMultiRWDataSourceProxy&quot;&gt; &nbsp;&nbsp;<br />
+&nbsp; &nbsp; &lt;bean id=&quot;mySqlDataSource&quot; class=&quot;com.weasel.mybatis.DynamicMultiRWDataSourceProxy&quot;&gt; &nbsp;&nbsp;<br />
 &nbsp; &nbsp; &nbsp; &nbsp; &lt;property name=&quot;readDataSources&quot;&gt;<br />
 &nbsp; &nbsp; &nbsp; &nbsp; <span style="white-space:pre">	</span>&lt;list&gt;<br />
 &nbsp; &nbsp; &nbsp; &nbsp; <span style="white-space:pre">		</span>&lt;ref bean=&quot;master1&quot;/&gt;<br />
