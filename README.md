@@ -87,7 +87,7 @@ postgresql的依赖配置
 		<property name="dataSource" ref="mySqlDataSource" />
 		<property name="configLocation" value="classpath:META-INF/mybatis/mybatis.xml" />
 		<property name="mapperLocations" value="classpath:META-INF/mybatis/mappers/**/*.xml" />
-	</bean>
+ </bean>
 四 多数据源读写分离配置
   在spring配置文件中先配置读数据和写数据源:
   <bean id="master1" class="com.mchange.v2.c3p0.ComboPooledDataSource"
@@ -103,8 +103,8 @@ postgresql的依赖配置
 		<property name="maxIdleTime" value="1800" />
 		<property name="maxStatements" value="1000" />
 		<property name="idleConnectionTestPeriod" value="8" />
-	</bean>
-	<bean id="master2" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+ </bean>
+ <bean id="master2" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
 		<property name="driverClass" value="${r2.jdbc.dirverClass}" />
 		<property name="jdbcUrl" value="${r2.jdbc.url}" />
@@ -117,8 +117,8 @@ postgresql的依赖配置
 		<property name="maxIdleTime" value="1800" />
 		<property name="maxStatements" value="1000" />
 		<property name="idleConnectionTestPeriod" value="8" />
-	</bean>
-	<bean id="slave1" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+</bean>
+<bean id="slave1" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
 		<property name="driverClass" value="${w1.jdbc.dirverClass}" />
 		<property name="jdbcUrl" value="${w1.jdbc.url}" />
@@ -131,8 +131,8 @@ postgresql的依赖配置
 		<property name="maxIdleTime" value="1800" />
 		<property name="maxStatements" value="1000" />
 		<property name="idleConnectionTestPeriod" value="8" />
-	</bean>
-	<bean id="slave2" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+</bean>
+<bean id="slave2" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
 		<property name="driverClass" value="${w2.jdbc.dirverClass}" />
 		<property name="jdbcUrl" value="${w2.jdbc.url}" />
@@ -145,9 +145,9 @@ postgresql的依赖配置
 		<property name="maxIdleTime" value="1800" />
 		<property name="maxStatements" value="1000" />
 		<property name="idleConnectionTestPeriod" value="8" />
-	</bean>
-    再在spring配置文件中定义数据源的代理类:
-    <bean id="mySqlDataSource" class="com.concom.mybatis.DynamicMultiRWDataSourceProxy">   
+</bean>
+再在spring配置文件中定义数据源的代理类:
+ <bean id="mySqlDataSource" class="com.concom.mybatis.DynamicMultiRWDataSourceProxy">   
         <property name="readDataSources">
         	<list>
         		<ref bean="master1"/>
@@ -160,13 +160,13 @@ postgresql的依赖配置
         		<ref bean="slave2"/>
         	</list>
         </property>
-    </bean>
-   在spring配置文件中定义SessionFactory:
-  <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+ </bean>
+在spring配置文件中定义SessionFactory:
+<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="mySqlDataSource" />
 		<property name="configLocation" value="classpath:META-INF/mybatis/mybatis.xml" />
 		<property name="mapperLocations" value="classpath:META-INF/mybatis/mappers/**/*.xml" />
-  </bean>	
+</bean>	
   
   注意：在三和四中只需要配置一种场景就可以，理论上多数据源读写分离中读库和写库可以是任意多个。读写分离只是数据源的路由，并没有做到读库和写库的数据同步。要实现读库和写库的数据同步，用户需要自行在数据库级中处理。
   
